@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -84,11 +85,46 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'glow': {
+					'0%': {
+						opacity: '0.4'
+					},
+					'50%': {
+						opacity: '1'
+					},
+					'100%': {
+						opacity: '0.4'
+					}
+				},
+				'pulse-slow': {
+					'0%, 100%': {
+						opacity: '0.8'
+					},
+					'50%': {
+						opacity: '0.3'
+					}
+				},
+				'spin-slow': {
+					'0%': {
+						transform: 'rotate(0deg)'
+					},
+					'100%': {
+						transform: 'rotate(360deg)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'glow': 'glow 3s ease-in-out infinite',
+				'pulse-slow': 'pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+				'spin-slow': 'spin-slow 15s linear infinite'
+			},
+			backgroundImage: {
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+				'gradient-diagonal': 'linear-gradient(45deg, var(--tw-gradient-stops))'
 			}
 		}
 	},
