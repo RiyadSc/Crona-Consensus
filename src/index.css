@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -93,4 +92,56 @@
     mask-composite: exclude;
     pointer-events: none;
   }
+}
+
+/* Navbar animation styles */
+.nav-link {
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+}
+
+.nav-text-wrapper {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  height: 20.8px; /* match the line-height */
+}
+
+.nav-text-top,
+.nav-text-bottom {
+  display: block;
+  position: relative;
+  height: 100%;
+  transition: transform 300ms ease-in-out;
+  will-change: transform;
+}
+
+.nav-text-top {
+  transform: translateY(0);
+}
+
+.nav-text-middle {
+  display: block;
+  position: relative;
+  height: 100%;
+  transition: transform 300ms ease-in-out;
+  will-change: transform;
+  transform: translateY(-100%);
+}
+
+.nav-text-bottom {
+  transform: translateY(-100%);
+}
+
+.nav-link:hover .nav-text-top {
+  transform: translateY(100%);
+}
+
+.nav-link:hover .nav-text-middle {
+  transform: translateY(0);
+}
+
+.nav-link:hover .nav-text-bottom {
+  transform: translateY(0);
 }
