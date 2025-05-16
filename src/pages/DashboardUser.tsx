@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { LogOut, Wallet, Coins, CreditCard, Download, Upload, BookOpen, Play, Copy } from "lucide-react";
+import React, { useState } from 'react';
+import { LogOut, Wallet, Coins, CreditCard, Download, Upload, BookOpen, Play } from "lucide-react";
 import { 
   Dialog, 
   DialogContent, 
@@ -13,8 +13,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { useWallet } from '../lib/WalletProvider';
-import * as StellarSdk from 'stellar-sdk';
 
 // Utility function to conditionally join class names
 const cn = (...classes: (string | undefined | null | false)[]) => {
@@ -215,43 +213,9 @@ const Navigation: React.FC<{ userName: string; walletBalance: number }> = ({
 };
 
 // Wallet Card Component
-const WalletCard: React.FC = () => {
+const WalletCard: React.FC<{ balance: number }> = ({ balance = 12.5 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const wallet = useWallet();
-  const address = wallet.stellarPublicKey || '';
-  const truncated = address ? `${address.slice(0, 6)}...${address.slice(-6)}` : '';
-  const [liveBalance, setLiveBalance] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (!address) return;
-    // @ts-ignore
-    const server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
-    let isMounted = true;
-    async function fetchBalance() {
-      try {
-        const account = await server.loadAccount(address);
-        const xlmBalance = account.balances.find(b => b.asset_type === 'native')?.balance;
-        if (isMounted && xlmBalance !== undefined) setLiveBalance(Number(xlmBalance));
-      } catch (e) {
-        if (isMounted) setLiveBalance(null);
-      }
-    }
-    fetchBalance();
-    const interval = setInterval(fetchBalance, 10000);
-    return () => {
-      isMounted = false;
-      clearInterval(interval);
-    };
-  }, [address]);
-
-  const handleCopy = async () => {
-    if (!address) return;
-    await navigator.clipboard.writeText(address);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  };
-
+  
   return (
     <div className="rounded-xl shadow-lg bg-[#111] border border-[#FF6B00]/40 p-6 overflow-hidden relative">
       <div className="absolute top-0 right-0 w-32 h-32 bg-stellarorange/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
@@ -264,26 +228,11 @@ const WalletCard: React.FC = () => {
         
         <div className="mt-2">
           <p className="text-4xl font-bold text-[#FF6B00]">
-            {liveBalance !== null ? liveBalance.toFixed(2) : '...'} <span className="text-xl">XLM</span>
+            {balance.toFixed(2)} <span className="text-xl">XLM</span>
           </p>
           <p className="text-sm text-white/70 mt-1">
-            ≈ ${(liveBalance !== null ? liveBalance * 0.2925 : 0).toFixed(2)} USD
+            ≈ ${(balance * 5.34).toFixed(2)} USD
           </p>
-        </div>
-        
-        <div className="flex items-center gap-2 mt-2 mb-4">
-          <span className="text-white/80 text-xs">Wallet Address:</span>
-          <span className="font-mono text-xs text-white bg-[#181818] px-2 py-1 rounded select-all">
-            {truncated}
-          </span>
-          <button
-            onClick={handleCopy}
-            className="ml-1 p-1 rounded hover:bg-[#222] transition"
-            title="Copy address"
-          >
-            <Copy className="w-4 h-4 text-[#FF6B00]" />
-          </button>
-          {copied && <span className="text-xs text-[#FF6B00] ml-2">Copied!</span>}
         </div>
         
         <div className="flex gap-3 mt-4">
@@ -525,7 +474,7 @@ export const StellarPayDashboard: React.FC<DashboardProps> = ({
         <div className="flex flex-col gap-8">
           {/* Wallet Section */}
           <section>
-            <WalletCard />
+            <WalletCard balance={walletBalance} />
           </section>
           
           {/* Purchases Section */}
