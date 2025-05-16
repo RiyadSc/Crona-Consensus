@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogOut, Wallet, Coins, CreditCard, Download, Upload, BookOpen, Play } from "lucide-react";
+import { LogOut, Wallet, Coins, CreditCard, Download, Upload, BookOpen, Play, Copy } from "lucide-react";
 import { 
   Dialog, 
   DialogContent, 
@@ -13,6 +13,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { useWallet } from "@/lib/WalletProvider";
 
 // Utility function to conditionally join class names
 const cn = (...classes: (string | undefined | null | false)[]) => {
@@ -214,8 +215,18 @@ const Navigation: React.FC<{ userName: string; walletBalance: number }> = ({
 
 // Wallet Card Component
 const WalletCard: React.FC<{ balance: number }> = ({ balance = 12.5 }) => {
+  const wallet = useWallet();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (wallet.stellarPublicKey) {
+      navigator.clipboard.writeText(wallet.stellarPublicKey);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    }
+  };
+
   return (
     <div className="rounded-xl shadow-lg bg-[#111] border border-[#FF6B00]/40 p-6 overflow-hidden relative">
       <div className="absolute top-0 right-0 w-32 h-32 bg-stellarorange/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
@@ -224,6 +235,25 @@ const WalletCard: React.FC<{ balance: number }> = ({ balance = 12.5 }) => {
         <div className="flex items-center gap-3">
           <Wallet className="h-6 w-6 text-stellarorange" />
           <h2 className="text-lg font-medium text-white">Wallet Balance</h2>
+        </div>
+        
+        {/* Wallet Address Display */}
+        <div className="flex items-center gap-2 mt-2">
+          <span className="font-mono text-white bg-[#181818] px-2 py-1 rounded">
+            {wallet.stellarPublicKey
+              ? `${wallet.stellarPublicKey.slice(0, 6)}...${wallet.stellarPublicKey.slice(-4)}`
+              : "No wallet address"}
+          </span>
+          <button
+            onClick={handleCopy}
+            className="p-1 rounded hover:bg-[#222] transition"
+            title="Copy address"
+          >
+            <Copy className="w-4 h-4 text-[#FF6B00]" />
+          </button>
+          {copied && (
+            <span className="text-xs text-[#FF6B00] ml-2">Copied!</span>
+          )}
         </div>
         
         <div className="mt-2">
