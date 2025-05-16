@@ -14,6 +14,24 @@ Watch our platform in action and learn about the technical architecture:
 ### [▶️ Watch Technical Deep Dive](https://youtu.be/UbGeQpvc7b0)
 *Detailed explanation of our architecture and technical implementation*
 
+
+
+## 📸 UI Screenshots
+
+### Landing Page
+![Landing Page](https://github.com/RiyadSc/Crona-Consensus/blob/main/public/screencapture-localhost-8080-2025-05-16-14_26_44.png?raw=true)
+*The welcoming landing page showcasing Crona's main features and value proposition*
+
+### Content Marketplace
+![Content Browser](https://github.com/RiyadSc/Crona-Consensus/blob/main/public/screencapture-localhost-8080-browse-2025-05-16-14_27_16.png?raw=true)
+*Browse through a diverse collection of premium digital content*
+
+### User Dashboard
+![Dashboard](https://github.com/RiyadSc/Crona-Consensus/blob/main/public/screencapture-localhost-8080-dashboard-2025-05-16-14_28_11.png?raw=true)
+*Manage your purchased content and account settings in the user dashboard*
+
+These screenshots provide a visual overview of Crona's clean, intuitive interface and key features. The platform combines modern design with powerful functionality to deliver a seamless user experience for both creators and consumers of digital content.
+
 ## 🚀 Features
 
 - **Micropayments**: Pay as little as $0.05 to unlock premium content
