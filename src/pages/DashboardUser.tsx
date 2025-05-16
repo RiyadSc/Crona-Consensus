@@ -144,7 +144,7 @@ const Navigation: React.FC<{ userName: string; walletBalance: number }> = ({
               <span className="text-white font-bold">S</span>
             </div>
             <span className="text-[#FF6B00] font-medium hidden sm:inline-block">
-              StellarPay
+              Crona
             </span>
           </a>
         </div>

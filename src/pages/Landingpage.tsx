@@ -130,7 +130,7 @@ const Navbar = () => {
     <div className="w-full flex justify-between items-center py-4 px-6 bg-[#0E0E10]/80 fixed top-0 z-50 backdrop-blur-md border-b border-white/10">
       <div className="flex items-center">
         <a href="/" className="text-white font-extrabold text-2xl tracking-tight gradient-text">
-          StellarPay
+          Crona
         </a>
       </div>
       {/* Desktop Navigation */}
@@ -462,7 +462,7 @@ const Footer = () => (
     </div>
     <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-center">
       <p className="text-gray-500 text-sm mb-4 md:mb-0">
-        © 2025 StellarPay. All rights reserved.
+        © 2025 Crona. All rights reserved.
       </p>
       <div className="flex space-x-6">
         <a href="#" className="text-gray-400 hover:text-orange-300 transition text-sm">Terms</a>

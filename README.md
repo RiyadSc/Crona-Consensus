@@ -1,6 +1,6 @@
-# Consensus - Blockchain-Powered Micropayments for Digital Content
+# Crona - Blockchain-Powered Micropayments for Digital Content
 
-Consensus is a decentralized micropayments platform that enables creators to monetize their digital content through the Stellar blockchain network. Users can purchase access to premium articles, videos, and other digital assets using XLM tokens with minimal transaction fees and instant settlements.
+Crona is a decentralized micropayments platform that enables creators to monetize their digital content through the Stellar blockchain network. Users can purchase access to premium articles, videos, and other digital assets using XLM tokens with minimal transaction fees and instant settlements.
 
 ## 🚀 Features
 
