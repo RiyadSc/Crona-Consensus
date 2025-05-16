@@ -1,0 +1,78 @@
+Context and Problem
+------------------
+We are working on a web application that uses Supabase as a backend. The app allows users to create a wallet, and upon wallet creation, it should insert a new row into a `users` table in Supabase. The table uses Row Level Security (RLS) to ensure that only the owner of a wallet can insert or access their own row, using a custom HTTP header (`x-wallet-id`) to identify the user.
+
+The Error
+---------
+When attempting to create a wallet and insert a row into the `users` table, the client receives a 401 Unauthorized error with the following message from Supabase/PostgREST:
+
+{
+    "code": "42501",
+    "details": null,
+    "hint": null,
+    "message": "new row violates row-level security policy for table \"users\""
+}
+
+This means the insert is being blocked by the RLS policy.
+
+What We Did to Fix It
+---------------------
+1. Ensured Headers and Payload Were Correct
+   - The client sends a POST request to `/rest/v1/users` with a JSON payload containing `contract_id` and `key_id_base64`.
+   - The custom fetch function in the client sets the `x-wallet-id` header to the same value as `contract_id`.
+   - The `Content-Type` header is set to `application/json`.
+   - Console and network logs confirm that the header and payload values match and are present.
+
+2. RLS Policy Setup
+   - The `users` table has RLS enabled.
+   - The following policies were created:
+
+     CREATE POLICY "Allow INSERT for new user with matching x-wallet-id"
+     ON public.users
+     FOR INSERT
+     WITH CHECK (
+       contract_id = current_setting('request.headers.x-wallet-id'::text, true)
+     );
+
+     CREATE POLICY "Allow ALL for user matching x-wallet-id"
+     ON public.users
+     FOR ALL
+     USING (
+       contract_id = current_setting('request.headers.x-wallet-id'::text, true)
+     );
+
+   - The policies are intended to allow:
+     - INSERT: Only if the `contract_id` in the new row matches the `x-wallet-id` header.
+     - ALL (SELECT/UPDATE/DELETE): Only for rows where `contract_id` matches the header.
+
+3. Debugging Steps
+   - We confirmed the header and payload values match.
+   - We temporarily created a debug policy to allow all inserts (`WITH CHECK (true)`), and the insert succeeded, confirming the issue was with the RLS policy logic.
+   - We checked the policies using `SELECT * FROM pg_policies WHERE tablename = 'users';` and confirmed the policies were present as written above.
+
+What We Got
+-----------
+- With the debug policy (`WITH CHECK (true)`), inserts worked.
+- With the intended header-matching policy, we consistently get the RLS violation error.
+- The network logs show the correct headers and payload are being sent.
+- The policies in the database use `current_setting('request.headers.x-wallet-id'::text, true)`.
+
+Current Hypothesis and Next Steps
+---------------------------------
+- The likely issue is the use of `::text` in the `current_setting` function. According to PostgREST and Supabase documentation, the correct usage is:
+  current_setting('request.headers.x-wallet-id', true)
+  (No `::text` cast.)
+- The cast may cause the policy to not match as expected, resulting in the RLS violation.
+
+Next steps:
+- Drop the existing policies.
+- Recreate them without the `::text` cast.
+- Test the insert again.
+
+Summary
+-------
+- The error is a row-level security violation on insert, despite correct headers and payload.
+- The RLS policy uses `current_setting('request.headers.x-wallet-id'::text, true)`.
+- Removing the `::text` cast is expected to resolve the issue, as the debug policy proves the rest of the flow is correct.
+
+This summary provides all the technical context, the debugging process, and the current state of the problem for another AI or developer. 
