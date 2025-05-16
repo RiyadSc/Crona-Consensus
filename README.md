@@ -2,6 +2,18 @@
 
 Crona is a decentralized micropayments platform that enables creators to monetize their digital content through the Stellar blockchain network. Users can purchase access to premium articles, videos, and other digital assets using XLM tokens with minimal transaction fees and instant settlements.
 
+## 🎥 Demo & Technical Overview
+
+Watch our platform in action and learn about the technical architecture:
+
+[![Demo Video](https://img.youtube.com/vi/Fk4SLvoFCq4/0.jpg)](https://youtu.be/Fk4SLvoFCq4)
+### [▶️ Watch Demo](https://youtu.be/Fk4SLvoFCq4)
+*A quick walkthrough of Crona's features and user experience*
+---
+[![Technical Overview](https://img.youtube.com/vi/UbGeQpvc7b0/0.jpg)](https://youtu.be/UbGeQpvc7b0)
+### [▶️ Watch Technical Deep Dive](https://youtu.be/UbGeQpvc7b0)
+*Detailed explanation of our architecture and technical implementation*
+
 ## 🚀 Features
 
 - **Micropayments**: Pay as little as $0.05 to unlock premium content
