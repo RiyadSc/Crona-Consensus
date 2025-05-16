@@ -1,73 +1,144 @@
-# Welcome to your Lovable project
+# Consensus - Blockchain-Powered Micropayments for Digital Content
 
-## Project info
+Consensus is a decentralized micropayments platform that enables creators to monetize their digital content through the Stellar blockchain network. Users can purchase access to premium articles, videos, and other digital assets using XLM tokens with minimal transaction fees and instant settlements.
 
-**URL**: https://lovable.dev/projects/ee233249-e7b9-488c-b3d7-233f3e8240a6
+## 🚀 Features
 
-## How can I edit this code?
+- **Micropayments**: Pay as little as $0.05 to unlock premium content
+- **Blockchain Integration**: Powered by Stellar for fast, low-cost transactions
+- **Wallet Management**: Create or connect existing Stellar wallets
+- **Content Marketplace**: Browse and purchase digital content from creators
+- **Creator Dashboard**: Upload and monetize your content
+- **User Library**: Access all purchased content in one place
 
-There are several ways of editing your application.
+## 🛠️ Technology Stack
 
-**Use Lovable**
+- **Frontend**: React, TypeScript, Vite
+- **UI**: shadcn/ui, Tailwind CSS
+- **Blockchain**: Stellar Network (via stellar-sdk)
+- **Authentication**: PasskeyKit for secure wallet management
+- **Backend**: Supabase for data storage
+- **State Management**: React Context API, TanStack Query
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ee233249-e7b9-488c-b3d7-233f3e8240a6) and start prompting.
+## 📋 Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js (18.x or higher)
+- npm or yarn
+- A Stellar wallet for testing (optional)
 
-**Use your preferred IDE**
+## 🔧 Installation & Setup
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1. Clone the repository
+```bash
+git clone <your-repo-url>
+cd consensus
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+2. Install dependencies
+```bash
+npm install
+```
 
-Follow these steps:
+3. Create a `.env` file in the root directory with the following variables:
+```
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_RPC_URL=https://soroban-testnet.stellar.org
+VITE_NETWORK_PASSPHRASE="Test SDF Network ; September 2015"
+VITE_WALLET_WASM_HASH=your_wallet_wasm_hash
+VITE_LAUNCHTUBE_URL=your_launchtube_url
+VITE_LAUNCHTUBE_JWT=your_launchtube_jwt
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+4. Start the development server
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+5. Build for production
+```bash
+npm run build
+```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🔍 Usage
 
-**Use GitHub Codespaces**
+### For Users
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+1. Visit the homepage and connect or create a Stellar wallet
+2. Browse through available content in the marketplace
+3. Purchase content using XLM tokens
+4. Access your purchased content in the user dashboard
 
-## What technologies are used for this project?
+### For Creators
 
-This project is built with:
+1. Sign up as a creator
+2. Upload your premium content (articles, videos, courses)
+3. Set prices for your content
+4. Track earnings and views through the creator dashboard
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📁 Project Structure
 
-## How can I deploy this project?
+```
+├── public/              # Static assets
+├── src/
+│   ├── components/      # Reusable UI components
+│   │   └── ui/          # shadcn/ui components
+│   ├── hooks/           # Custom React hooks
+│   ├── lib/             # Utility functions and configurations
+│   │   ├── passkey.ts   # Wallet connection functionality
+│   │   ├── supabase.ts  # Database connection
+│   │   └── utils.ts     # Helper functions
+│   ├── pages/           # Application pages
+│   │   ├── ContentView.tsx  # Content viewing page
+│   │   ├── DashboardUser.tsx  # User dashboard
+│   │   ├── Index.tsx    # Homepage
+│   │   └── Landingpage.tsx  # Landing page
+│   ├── App.tsx          # Main application component
+│   ├── main.tsx         # Application entry point
+│   └── index.css        # Global styles
+├── .env                 # Environment variables
+├── package.json         # Dependencies and scripts
+├── tailwind.config.js   # Tailwind CSS configuration
+├── tsconfig.json        # TypeScript configuration
+└── vite.config.js       # Vite configuration
+```
 
-Simply open [Lovable](https://lovable.dev/projects/ee233249-e7b9-488c-b3d7-233f3e8240a6) and click on Share -> Publish.
+## 🔒 Environment Variables
 
-## Can I connect a custom domain to my Lovable project?
+This application requires the following environment variables:
 
-Yes, you can!
+| Variable | Description |
+|----------|-------------|
+| `VITE_SUPABASE_URL` | URL for your Supabase instance |
+| `VITE_SUPABASE_ANON_KEY` | Anonymous API key for Supabase |
+| `VITE_RPC_URL` | URL for the Stellar RPC endpoint |
+| `VITE_NETWORK_PASSPHRASE` | Network passphrase for Stellar |
+| `VITE_WALLET_WASM_HASH` | Hash for the wallet WASM |
+| `VITE_LAUNCHTUBE_URL` | URL for Launchtube service |
+| `VITE_LAUNCHTUBE_JWT` | JWT for Launchtube authentication |
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🤝 Contributing
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgements
+
+- [Stellar Development Foundation](https://www.stellar.org/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Vite](https://vitejs.dev/)
+- [Supabase](https://supabase.io/)
+
+---
+
+Built with ❤️ using the Stellar blockchain
