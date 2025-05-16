@@ -67,55 +67,80 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [contractId, keyId]);
 
   const createWallet = useCallback(async () => {
+    console.log('[CreateWallet] Starting wallet creation process');
     setLoading(true);
     try {
+      console.log('[CreateWallet] Attempting to create wallet with StellarPay');
       const wallet = await account.createWallet('StellarPay', 'anon');
-      console.log('[WalletProvider] wallet object:', wallet);
+      console.log('[CreateWallet] Wallet created successfully:', wallet);
+  
+      console.log('[CreateWallet] Sending signed transaction to server');
       await server.send(wallet.signedTx);
+      console.log('[CreateWallet] Transaction sent successfully');
+  
+      console.log('[CreateWallet] Setting contract and key IDs');
       setContractId(wallet.contractId);
       setKeyId(wallet.keyIdBase64);
+  
+      console.log('[CreateWallet] Generating Stellar keypair');
       const stellarKeypair = Keypair.random();
       const stellarPublicKey = stellarKeypair.publicKey();
       const stellarSecret = stellarKeypair.secret();
-      setStellarPublicKey(stellarPublicKey);
+      console.log('[CreateWallet] Stellar public key generated:', stellarPublicKey);
+  
+      console.log('[CreateWallet] Setting local storage items');
       localStorage.setItem(CONTRACT_KEY, wallet.contractId);
       localStorage.setItem(WALLET_KEY, wallet.keyIdBase64);
-      // Check if user exists
-      const { data: existingUser } = await supabase
-        .from('users')
-        .select('*')
-        .eq('key_id_base64', wallet.keyIdBase64)
-        .single();
-      if (existingUser) {
-        setContractId(existingUser.contract_id);
-        setKeyId(existingUser.key_id_base64);
-        setStellarPublicKey(existingUser.stellar_public_key || stellarPublicKey);
-        localStorage.setItem(CONTRACT_KEY, existingUser.contract_id);
-        localStorage.setItem(WALLET_KEY, existingUser.key_id_base64);
-        navigate('/dashboard');
-      } else {
+
+      console.log('[CreateWallet] key id is', wallet.keyIdBase64)
+      
+        const newUserData = {
+          contract_id: wallet.contractId,
+          key_id_base64: wallet.keyIdBase64,
+          stellar_public_key: stellarPublicKey
+        };
+        console.log('[CreateWallet] Attempting to insert new user:', newUserData);
+        
         const { data: newUser, error: insertError } = await supabase
           .from('users')
-          .insert({ contract_id: wallet.contractId, key_id_base64: wallet.keyIdBase64, stellar_public_key: stellarPublicKey })
+          .insert(newUserData)
           .single();
+  
         if (insertError) {
+          console.error('[CreateWallet] Error inserting new user:', insertError);
           throw insertError;
         } else {
-          setContractId((newUser as any).contract_id);
-          setKeyId((newUser as any).key_id_base64);
-          setStellarPublicKey((newUser as any).stellar_public_key || stellarPublicKey);
-          localStorage.setItem(CONTRACT_KEY, (newUser as any).contract_id);
-          localStorage.setItem(WALLET_KEY, (newUser as any).key_id_base64);
+          console.log('[CreateWallet] New user created successfully - User ID:', newUserData.key_id_base64);
+          console.log('[CreateWallet] New user details:', {
+            contractId: newUserData.contract_id,
+            keyIdBase64: newUserData.key_id_base64,
+            stellarPublicKey: newUserData.stellar_public_key,
+            // Add any other relevant fields you want to log
+          });
+
+          setContractId(newUserData.contract_id);
+          setKeyId(newUserData.key_id_base64);
+          setStellarPublicKey(newUserData.stellar_public_key || stellarPublicKey);
+          localStorage.setItem(CONTRACT_KEY, newUserData.contract_id);
+          localStorage.setItem(WALLET_KEY, newUserData.key_id_base64);
+          console.log('[CreateWallet] Navigating to dashboard for new user');
           navigate('/dashboard');
-        }
+        
       }
     } catch (err) {
-      console.error('Error in createWallet:', err, JSON.stringify(err), err?.message, err?.stack);
+      console.error('[CreateWallet] Error in createWallet:', {
+        error: err,
+        stringifiedError: JSON.stringify(err),
+        message: err?.message,
+        stack: err?.stack
+      });
       throw err;
     } finally {
+      console.log('[CreateWallet] Process completed, setting loading to false');
       setLoading(false);
     }
   }, [navigate]);
+
 
   const connectWallet = useCallback(async () => {
     setLoading(true);
@@ -124,14 +149,20 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       console.log('[WalletProvider] wallet:', wallet);
       setContractId(wallet.contractId);
       setKeyId(wallet.keyIdBase64);
+
+    
       localStorage.setItem(CONTRACT_KEY, wallet.contractId);
       localStorage.setItem(WALLET_KEY, wallet.keyIdBase64);
       // Check if user exists
-      const { data: existingUser } = await supabase
+      const { data: existingUsers } = await supabase
         .from('users')
         .select('*')
         .eq('key_id_base64', wallet.keyIdBase64)
         .single();
+
+      const existingUser = existingUsers[0]
+      console.log("Existing user:", existingUser)
+      console.log("User id", existingUser.key_id_base64)
       if (existingUser) {
         setContractId(existingUser.contract_id);
         setKeyId(existingUser.key_id_base64);
